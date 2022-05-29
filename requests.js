@@ -3,6 +3,8 @@
 function getARandomQuote () {
     let score = 0
 
+    let answers = []
+
     let quotes = [ 
         {
             quote: "When you play the game of thrones, you win or you die. There is no middle ground.",
@@ -48,6 +50,13 @@ function getARandomQuote () {
 
         if( quotes[i]['character'].toLowerCase() == answer.toLowerCase()) {
             score = score + 1
+            
+            answers.push({
+                quote: quotes[i]['quote'],
+                character: quotes[i]['character'],
+                result: 'correct'
+            })
+
             alert("Respuesta correcta! Sumaste un punto \n Tu puntaje actual es: " + score)
         } else {
             alert("Respuesta incorrecta, pero tenés una oportunidad más. Úsala bien!")
@@ -69,14 +78,35 @@ function getARandomQuote () {
             }
 
             if( quotes[i]['character'].toLowerCase() == answer.toLowerCase()) {
+
                 score = score + 1
+                answers.push({
+                    quote: quotes[i]['quote'],
+                    character: quotes[i]['character'],
+                    result: 'correct'
+                })
+
                 alert("Respuesta correcta! Sumaste un punto \n Tu puntaje actual es: " + score)
+
             } else {
+
+                answers.push({
+                    quote: quotes[i]['quote'],
+                    character: quotes[i]['character'],
+                    result: 'incorrect'
+                })
+                
                 alert("Respuesta incorrecta, tu puntaje actual sigue siendo " + score)
+
             }
         }
     }
 
+    let correctAnswers = answers.filter( item => item.result == 'correct' )
+
+    let getCorrectAnswers = correctAnswers.map( item => { return " - " + item['character'] + " : '" + item['quote'] + "' \n\n"}) 
+
+    alert("Tus respuestas correctas fueron: \n\n" + getCorrectAnswers)
 
     if(score == 5) {
         alert("Obtuviste un puntaje perfecto! Felicitaciones!")
