@@ -5,6 +5,8 @@ function getARandomQuote () {
 
     let answers = []
 
+    document.getElementById("gameContent").innerHTML = "<div class='aux'> <p>No tuviste respuestas correctas</p></div>"
+
     let quotes = [ 
         {
             quote: "When you play the game of thrones, you win or you die. There is no middle ground.",
@@ -104,13 +106,34 @@ function getARandomQuote () {
 
     let correctAnswers = answers.filter( item => item.result == 'correct' )
 
-    let getCorrectAnswers = correctAnswers.map( item => { return " - " + item['character'] + " : '" + item['quote'] + "' \n\n"}) 
-
-    alert("Tus respuestas correctas fueron: \n\n" + getCorrectAnswers)
-
     if(score == 5) {
         alert("Obtuviste un puntaje perfecto! Felicitaciones!")
     } else {
         alert("Tu puntaje fue: " + score)
+    } 
+
+    if(score == 0){
+        document.getElementById("gameContent").innerHTML = '<div class = "answersTitleContainer" > No tuviste respuestas correctas </div><a href="#" onclick="restartGame()"> <div class="aux"> ¿Querés jugar de nuevo? </div> </a>'
+    } else {
+        let showResults = [`<div class = "answersTitleContainer" > Tus respuestas correctas son </div>`]
+
+        for ( let answer in correctAnswers){
+            showResults.push(`<div class = 'answersStyle'> - ${correctAnswers[answer]['character']}  : ' ${correctAnswers[answer]['quote']} ' \n\n</div>`)
+        }
+
+        let container = `<div class = 'answersContainer'>`
+
+        container = container + showResults + `</div>`
+
+        document.getElementById("gameContent").innerHTML = container
     }
+
+}
+
+function restartGame () {
+
+    let changeContent = '<a class="startGameButtonRef" href="#" onclick="getARandomQuote()"><div class="startGameButton"><div class="startGameText">START GAME</div></div></a>'
+
+    document.getElementById("gameContent").innerHTML = changeContent
+
 }
