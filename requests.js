@@ -1,11 +1,14 @@
 
+let startGameButton = document.getElementById("startGameButtonRef")
+startGameButton.addEventListener('click',getARandomQuote)
+
 
 function getARandomQuote () {
     let score = 0
 
     let answers = []
 
-    document.getElementById("gameContent").innerHTML = "<div class='aux'> <p>No tuviste respuestas correctas</p></div>"
+    //document.getElementById("gameContent").innerHTML = "<div class='aux'>No tuviste respuestas correctas </div>"
 
     let quotes = [ 
         {
@@ -110,13 +113,13 @@ function getARandomQuote () {
         alert("Obtuviste un puntaje perfecto! Felicitaciones!")
     } else {
         alert("Tu puntaje fue: " + score)
-    } 
+    }  
 
     if(score === 0){
-        
-        document.getElementById("gameContent").innerHTML = '<div id = "answersTitleContainer" > No tuviste respuestas correctas </div><div id="startGameButton" onclick="restartGame()"> </div>'
 
-        document.getElementById("startGameButton").innerHTML = '<div class="aux"> ¿Querés jugar de nuevo? </div>'
+        document.getElementById("gameContent").innerHTML = '<div id = "answersTitleContainer" > No tuviste respuestas correctas </div><div id="startGameButton"> </div>'
+
+        document.getElementById("startGameButton").innerHTML = '<div id="restartGame"> ¿Querés jugar de nuevo? </div>'
 
     } else {
         let showResults = [`<div id = "answersTitleContainer" > Tus respuestas correctas son </div>`]
@@ -125,15 +128,22 @@ function getARandomQuote () {
             showResults.push(`<div class = 'answersStyle'> - ${correctAnswers[answer]['character']}  : ' ${correctAnswers[answer]['quote']} ' \n\n</div>`)
         }
 
-        document.getElementById("gameContent").innerHTML = `<div class = 'answersContainer'> ${showResults} </div>`
+        document.getElementById("gameContent").innerHTML = `<div class = 'answersContainer'> ${showResults} </div>  <div id="startGameButton"> <div id='restartGame'> ¿Querés jugar de nuevo? </div></div>`
     }
+
+
+    let restartGameButton = document.getElementById("startGameButton")
+    restartGameButton.addEventListener('click',restartGame)
 
 }
 
 function restartGame () {
 
-    let changeContent = '<a class="startGameButtonRef" href="#" onclick="getARandomQuote()"><div class="startGameButton"><div class="startGameText">START GAME</div></div></a>'
-
+    let changeContent = '<div id="startGameButtonRef"><div class="startGameButton"><div class="startGameText">START GAME</div></div></div>'
     document.getElementById("gameContent").innerHTML = changeContent
+    
+    let startGameButton = document.getElementById("startGameButtonRef")
+    startGameButton.addEventListener('click',getARandomQuote)
+
 
 }

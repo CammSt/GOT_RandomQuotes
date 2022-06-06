@@ -3,7 +3,9 @@ body {
 	background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
 	overflow: hidden;
 	//filter: drop-shadow(0 0 10px white);
-	font-family: 'Courgette'
+	font-family: 'Courgette';
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
 @function random_range($min, $max) {
@@ -116,13 +118,14 @@ header {
 	font-size: 1.4vw;
 }
 
-.startGameButtonRef {
+#startGameButtonRef {
 	text-decoration: none;
 	width: 30px;
 	position:absolute;
 	left: 35%;
 	top: 40%;
 	width: 25%;
+	cursor: pointer;
 }
 
 .startGameButton {
@@ -252,4 +255,18 @@ header {
 	text-align: center;
 	margin-left: 30%;
 	margin-top: 3%;
+}
+
+#restartGame {
+	background-color: white;
+
+	text-decoration: underline;
+	padding-top: 1%;
+	padding-bottom: 1%;
+	border-radius: 1vw;
+	width: 38%;
+	text-align: center;
+	margin-left: 30%;
+	margin-top: 3%;
+	cursor: pointer;
 }
