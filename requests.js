@@ -112,20 +112,20 @@ function getARandomQuote () {
         alert("Tu puntaje fue: " + score)
     } 
 
-    if(score == 0){
-        document.getElementById("gameContent").innerHTML = '<div class = "answersTitleContainer" > No tuviste respuestas correctas </div><a href="#" onclick="restartGame()"> <div class="aux"> ¿Querés jugar de nuevo? </div> </a>'
+    if(score === 0){
+        
+        document.getElementById("gameContent").innerHTML = '<div id = "answersTitleContainer" > No tuviste respuestas correctas </div><div id="startGameButton" onclick="restartGame()"> </div>'
+
+        document.getElementById("startGameButton").innerHTML = '<div class="aux"> ¿Querés jugar de nuevo? </div>'
+
     } else {
-        let showResults = [`<div class = "answersTitleContainer" > Tus respuestas correctas son </div>`]
+        let showResults = [`<div id = "answersTitleContainer" > Tus respuestas correctas son </div>`]
 
         for ( let answer in correctAnswers){
             showResults.push(`<div class = 'answersStyle'> - ${correctAnswers[answer]['character']}  : ' ${correctAnswers[answer]['quote']} ' \n\n</div>`)
         }
 
-        let container = `<div class = 'answersContainer'>`
-
-        container = container + showResults + `</div>`
-
-        document.getElementById("gameContent").innerHTML = container
+        document.getElementById("gameContent").innerHTML = `<div class = 'answersContainer'> ${showResults} </div>`
     }
 
 }
