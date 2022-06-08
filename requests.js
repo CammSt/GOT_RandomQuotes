@@ -1,14 +1,19 @@
 
+let snowRef = document.getElementById('snow')
+let innterHTMLaux = []
+for( let i = 0; i < 200; i++) {
+    innterHTMLaux.push(' <div class="snow"></div>')
+}
+snowRef.innerHTML = innterHTMLaux
+
 let startGameButton = document.getElementById("startGameButtonRef")
-startGameButton.addEventListener('click',getARandomQuote)
+if(startGameButton) startGameButton.addEventListener('click',getARandomQuote)
 
 
 function getARandomQuote () {
     let score = 0
 
     let answers = []
-
-    //document.getElementById("gameContent").innerHTML = "<div class='aux'>No tuviste respuestas correctas </div>"
 
     let quotes = [ 
         {
@@ -40,7 +45,7 @@ function getARandomQuote () {
         let answer = prompt("Who said this: '" + quote + "'")
 
         if(answer == null) {
-            alert("Saliendo del juego")
+            alert("Exiting the game")
             return
         }
 
@@ -48,7 +53,7 @@ function getARandomQuote () {
             answer = prompt("Who said this: '" + quote + "'")
 
             if(answer == null) {
-                alert("Saliendo del juego")
+                alert("Exiting the game")
                 return
             }
         }
@@ -62,14 +67,14 @@ function getARandomQuote () {
                 result: 'correct'
             })
 
-            alert("Respuesta correcta! Sumaste un punto \n Tu puntaje actual es: " + score)
+            alert("Correct answer! You scored one more point \n Your score is: " + score)
         } else {
-            alert("Respuesta incorrecta, pero tenés una oportunidad más. Úsala bien!")
+            alert("Wrong answer, but you have one more chance. Use it well!")
 
             answer = prompt("Who said this: '" + quote + "'")
 
             if(answer == null) {
-                alert("Saliendo del juego")
+                alert("Exiting the game")
                 return
             }
     
@@ -77,7 +82,7 @@ function getARandomQuote () {
                 answer = prompt("Who said this: '" + quote + "'")
     
                 if(answer == null) {
-                    alert("Saliendo del juego")
+                    alert("Exiting the game")
                     return
                 }
             }
@@ -91,7 +96,7 @@ function getARandomQuote () {
                     result: 'correct'
                 })
 
-                alert("Respuesta correcta! Sumaste un punto \n Tu puntaje actual es: " + score)
+                alert("Correct answer! You scored one more point \n Your score is: " + score)
 
             } else {
 
@@ -101,7 +106,7 @@ function getARandomQuote () {
                     result: 'incorrect'
                 })
                 
-                alert("Respuesta incorrecta, tu puntaje actual sigue siendo " + score)
+                alert("Wrong answer, your score is still: " + score)
 
             }
         }
@@ -110,25 +115,25 @@ function getARandomQuote () {
     let correctAnswers = answers.filter( item => item.result == 'correct' )
 
     if(score == 5) {
-        alert("Obtuviste un puntaje perfecto! Felicitaciones!")
+        alert("Perfect score! Congratulations!")
     } else {
-        alert("Tu puntaje fue: " + score)
+        alert("Your score was: " + score)
     }  
 
     if(score === 0){
 
-        document.getElementById("gameContent").innerHTML = '<div id = "answersTitleContainer" > No tuviste respuestas correctas </div><div id="startGameButton"> </div>'
+        document.getElementById("gameContent").innerHTML = "<div id = 'answersTitleContainer' > You don't have correct answers </div><div id='startGameButton'> </div>"
 
-        document.getElementById("startGameButton").innerHTML = '<div id="restartGame"> ¿Querés jugar de nuevo? </div>'
+        document.getElementById("startGameButton").innerHTML = '<div id="restartGame"> Want to play again? </div>'
 
     } else {
-        let showResults = [`<div id = "answersTitleContainer" > Tus respuestas correctas son </div>`]
+        let showResults = [`<div id = "answersTitleContainer" > Your correct answers are: </div>`]
 
         for ( let answer in correctAnswers){
             showResults.push(`<div class = 'answersStyle'> - ${correctAnswers[answer]['character']}  : ' ${correctAnswers[answer]['quote']} ' \n\n</div>`)
         }
 
-        document.getElementById("gameContent").innerHTML = `<div class = 'answersContainer'> ${showResults} </div>  <div id="startGameButton"> <div id='restartGame'> ¿Querés jugar de nuevo? </div></div>`
+        document.getElementById("gameContent").innerHTML = `<div class = 'answersContainer'> ${showResults} </div>  <div id="startGameButton"> <div id='restartGame'> Want to play again? </div></div>`
     }
 
 

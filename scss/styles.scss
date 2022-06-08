@@ -78,7 +78,8 @@ header {
 
 }
 
-.menuItem {
+#gameInfo,
+#housesInfo {
 	border: solid whitesmoke;
 	padding: 1vw;
 	border-radius: 1vw;
@@ -102,6 +103,7 @@ header {
 		}
 	}
 }
+
 
 .menuText {
 	font-size: 1.2vw;
