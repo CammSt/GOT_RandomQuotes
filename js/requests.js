@@ -10,6 +10,11 @@ let startGameButton = document.getElementById("startGameButtonRef")
 if(startGameButton) startGameButton.addEventListener('click',getARandomQuote)
 
 
+function updateValue(e) {
+    console.log(e.srcElement.value)
+    return e.srcElement.value
+}
+
 function getARandomQuote () {
     let score = 0
 
@@ -38,9 +43,19 @@ function getARandomQuote () {
         }
     ]
 
+    let gameContentRef = document.getElementById('gameContent')
+    
+
     for ( let i = 0; i < quotes.length ; i++) {
 
         let quote = quotes[i].quote
+
+       /*  gameContentRef.innerHTML = `<div> Who said this: ${quote} </div>`
+        let answer = prompt("Who said this: '" + quote + "'") */
+
+        {/* <input placeholder="Ingrese algún texto" name="answer"/> */}
+        /* const input = document.querySelector('input');
+        input.addEventListener('input', updateValue); */
 
         let answer = prompt("Who said this: '" + quote + "'")
 
@@ -149,6 +164,5 @@ function restartGame () {
     
     let startGameButton = document.getElementById("startGameButtonRef")
     startGameButton.addEventListener('click',getARandomQuote)
-
 
 }
