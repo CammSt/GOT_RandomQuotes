@@ -91,20 +91,11 @@ function getARandomQuote () {
             character: "Jon Snow"
         }
     ]
-
-    let gameContentRef = document.getElementById('gameContent')
     
 
     for ( let i = 0; i < quotes.length ; i++) {
 
         let quote = quotes[i].quote
-
-       /*  gameContentRef.innerHTML = `<div> Who said this: ${quote} </div>`
-        let answer = prompt("Who said this: '" + quote + "'") */
-
-        {/* <input placeholder="Ingrese algún texto" name="answer"/> */}
-        /* const input = document.querySelector('input');
-        input.addEventListener('input', updateValue); */
 
         let answer = prompt("Who said this: '" + quote + "'")
 
@@ -176,7 +167,10 @@ function getARandomQuote () {
         }
     }
 
-    let correctAnswers = answers.filter( item => item.result == 'correct' )
+    sessionStorage.setItem("answers", JSON.stringify(answers))
+    let auxAnswers =  JSON.parse(sessionStorage.getItem("answers"))
+
+    let correctAnswers = auxAnswers.filter( item => item.result == 'correct' )
 
     if(score == 5) {
         alert("Perfect score! Congratulations!")
