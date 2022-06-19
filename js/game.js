@@ -2,14 +2,109 @@
 let snowRef = document.getElementById('snow')
 let innterHTMLaux = []
 for( let i = 0; i < 200; i++) {
-    innterHTMLaux.push(' <div class="snow"></div>')
+    innterHTMLaux.push('<div class="snow"></div>')
 }
-snowRef.innerHTML = innterHTMLaux
+snowRef.innerHTML = innterHTMLaux.join('')
 
 function updateValue(e) {
     console.log(e.srcElement.value)
     return e.srcElement.value
 }
+
+const charactersImages = [
+    {
+        'character': "Brienne of Tharth" ,
+        "image": "https://thronesapi.com/assets/images/brienne-tarth.jpeg"
+    },
+    {
+        'character': "Tormund",
+        "image": "https://thronesapi.com/assets/images/tormund-giantsbane.jpg"
+    },
+    {
+        'character': "Ramsay Bolton",
+        "image": "https://thronesapi.com/assets/images/ramsey-bolton.jpg"
+    },
+    {
+        'character': "Cersei Lannister",
+        "image": "https://thronesapi.com/assets/images/cersei.jpg"
+    },
+    {
+        'character': "Sansa Stark",
+        "image": "https://thronesapi.com/assets/images/sansa-stark.jpeg"
+    },
+    {
+        'character': "Tyrion Lannister",
+        "image": "https://thronesapi.com/assets/images/tyrion-lannister.jpg"
+    },
+    {
+        'character': "Tywin Lannister",
+        "image": "https://thronesapi.com/assets/images/tywin-lannister.jpg"
+    },
+    {
+        'character': "Mance Rayder",
+        "image": "https://es.web.img2.acsta.net/r_1280_720/newsv7/15/02/25/10/59/5324690.jpg"
+    },
+    {
+        'character': "Petyr Baelish",
+        "image": "https://thronesapi.com/assets/images/littlefinger.jpg"
+    },
+    {
+        'character': "Aerys II Targaryen",
+        "image": "https://static.wikia.nocookie.net/juego-detronos-fanon/images/4/47/Aerys_II_Targaryen_Mad_King.jpg/revision/latest?cb=20190713222806&path-prefix=es"
+    },
+    {
+        'character': "Jaime Lannister",
+        "image": "https://thronesapi.com/assets/images/jaime-lannister.jpg"
+    },
+    {
+        'character': "Eddard \"Ned\" Stark",
+        "image": "https://thronesapi.com/assets/images/ned-stark.jpg"
+    },
+    {
+        'character': "Lord Varys",
+        "image": "https://thronesapi.com/assets/images/varys.jpg"
+    },
+    {
+        'character': "Arya Stark",
+        "image": "https://thronesapi.com/assets/images/arya-stark.jpg"
+    },
+    {
+        'character': "Jon Snow",
+        "image": "https://thronesapi.com/assets/images/jon-snow.jpg"
+    },
+    {
+        'character': "Theon Greyjoy",
+        "image": "https://thronesapi.com/assets/images/theon.jpg"
+    },
+    {
+        'character': "Bran Stark",
+        "image": "https://thronesapi.com/assets/images/bran-stark.jpg"
+    },
+    {
+        'character': "Samwell Tarly",
+        "image": "https://thronesapi.com/assets/images/sam.jpg"
+    },
+    {
+        'character': "Robert Baratheon",
+        "image": "https://thronesapi.com/assets/images/robert-baratheon.jpeg"
+    },
+    {
+        'character': "Olenna Tyrell",
+        "image": "https://thronesapi.com/assets/images/olenna-tyrell.jpg"
+    },
+    {
+        'character': "Joffrey Baratheon",
+        "image": "https://thronesapi.com/assets/images/joffrey.jpg"
+    },
+    {
+        'character': "Melisandre",
+        "image": "https://thronesapi.com/assets/images/melisandre.jpg"
+    },
+    {
+        'character': "Daenerys Targaryen",
+        "image": "https://thronesapi.com/assets/images/daenerys.jpg"
+    }
+]
 
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -63,119 +158,179 @@ if((submitNameButton != undefined) && (nameInput != undefined)) {
 }
 
 
+async function quotesFetch () {
 
-function getARandomQuote () {
-    let score = 0
-
-    let answers = []
-
-    let quotes = [ 
-        {
-            quote: "When you play the game of thrones, you win or you die. There is no middle ground.",
-            character: "Cersei Lannister"
-        },
-        {
-            quote: "The man who passes the sentence should swing the sword.",
-            character: "Eddard Stark"
-        },
-        {
-            quote: "The day will come when you think you are safe and happy, and your joy will turn to ashes in your mouth.",
-            character: "Tyrion Lannister"
-        },
-        {
-            quote: "When people ask you what happened here, tell them the North remembers. Tell them winter came for House Frey.",
-            character: "Arya Stark"
-        },
-        {
-            quote: "Love is the death of duty.",
-            character: "Jon Snow"
-        }
-    ]
+    const quotes = fetch('https://api.gameofthronesquotes.xyz/v1/random/10')
+        .then(response => response.json())
+        .then(json => {
+            return json;
+        })
+        .catch( e => console.log(e) )
     
+    return quotes;
+}
 
-    for ( let i = 0; i < quotes.length ; i++) {
+async function getRandomImages (characters,randomImages,correctAnswer) {
+    
+    let max = characters.length - 1
+    
+    let i = 0
+    while(randomImages.length != 3) {
+        let index = Math.round(Math.random() * (max - 0) + 0);
 
-        let quote = quotes[i].quote
-
-        let answer = prompt("Who said this: '" + quote + "'")
-
-        if(answer == null) {
-            alert("Exiting the game")
-            return
+        let imageObj = {
+            image : characters[index].image,
+            character: characters[index].character
         }
 
-        while ( answer.length == 0) {
-            answer = prompt("Who said this: '" + quote + "'")
-
-            if(answer == null) {
-                alert("Exiting the game")
-                return
-            }
+        if( (!randomImages.find( item => item.character == imageObj.character)) && (imageObj.character != correctAnswer)  ){
+            randomImages.push(imageObj)
         }
 
-        if( quotes[i]['character'].toLowerCase() == answer.toLowerCase()) {
+        i++
+    }
+    randomImages.push(characters.find( item => item.character == correctAnswer))
+
+    randomImages.sort((a, b) => 0.5 - Math.random());
+}
+
+function selectOnlyThis(id) {
+    for (let i = 1;i <= 4; i++) {
+        document.getElementById("feature" + i).checked = false;
+    }
+    document.getElementById(id).checked = true;
+}
+
+function getSelectedOption() {  
+    console.log("entro a revisar los checkbox");
+    let selected = null
+
+    for (let i = 1;i <= 4; i++) {
+        
+        if(document.getElementById("feature" + i).checked) {
+            selected = document.getElementById("feature" + i)
+        }
+    } 
+
+    return selected
+}
+
+
+function nextQuestion(answerToCheck,score,answers) {
+    let selected = getSelectedOption()
+    
+    if(selected == null) {
+        Swal.fire({
+            title: 'No option selected',
+            text: 'Select an option to keep playing',
+            icon:'error',
+            confirmButtonText: 'OK',
+        })
+    } else {
+        if( selected.value.toLowerCase() == answerToCheck['character']['name'].toLowerCase()) {
             score = score + 1
             
             answers.push({
-                quote: quotes[i]['quote'],
-                character: quotes[i]['character'],
+                quote: answerToCheck['sentence'],
+                character: answerToCheck['character']['name'],
                 result: 'correct'
             })
 
-            alert("Correct answer! You scored one more point \n Your score is: " + score)
+            Swal.fire({
+                title: 'Correct answer!',
+                text: 'You scored one more point \n Your score is: ' + score,
+                icon:'success',
+                confirmButtonText: 'OK',
+            })
+            
         } else {
-            alert("Wrong answer, but you have one more chance. Use it well!")
-
-            answer = prompt("Who said this: '" + quote + "'")
-
-            if(answer == null) {
-                alert("Exiting the game")
-                return
-            }
-    
-            while ( answer.length == 0) {
-                answer = prompt("Who said this: '" + quote + "'")
-    
-                if(answer == null) {
-                    alert("Exiting the game")
-                    return
-                }
-            }
-
-            if( quotes[i]['character'].toLowerCase() == answer.toLowerCase()) {
-
-                score = score + 1
-                answers.push({
-                    quote: quotes[i]['quote'],
-                    character: quotes[i]['character'],
-                    result: 'correct'
-                })
-
-                alert("Correct answer! You scored one more point \n Your score is: " + score)
-
-            } else {
-
-                answers.push({
-                    quote: quotes[i]['quote'],
-                    character: quotes[i]['character'],
-                    result: 'incorrect'
-                })
-                
-                alert("Wrong answer, your score is still: " + score)
-
-            }
+            Swal.fire({
+                title: 'Wrong answer!',
+                text: 'Your score is still: ' + score,
+                icon:'error',
+                confirmButtonText: 'OK',
+            })
         }
+        return
     }
+}
+
+
+async function getARandomQuote () {
+
+    let score = 0
+    let answers = []
+    let quotes = await quotesFetch()
+
+    console.log("quotes ",quotes);
+    
+    for ( let i = 0; i < quotes.length ; i++) {
+
+        console.log("iteracion nro: ", i+1);
+        console.log("score es: ", score);
+
+        let quote = quotes[i].sentence
+
+        let randomImages = []
+        await getRandomImages(charactersImages,randomImages,quotes[i]['character']['name'])
+    
+        document.getElementById("gameContent").innerHTML = `
+        <div id='checkboxContainer'>
+            <div id='quoteTitle'> Who said this: '${quote}'</div>
+            <div id='imagesContainer'>
+                <article id='optionContainer1'>
+                    <input type="checkbox" id="feature1" onclick="selectOnlyThis(this.id)" value="${randomImages[0]['character']}"/>
+                    <img src="${randomImages[0]['image']}" alt="${randomImages[0]['character']}" >
+                    <div>${randomImages[0]['character']}</div>
+                </article> 
+                <article id='optionContainer2'>
+                    <input type="checkbox" id="feature2" onclick="selectOnlyThis(this.id)" value="${randomImages[1]['character']}"/>
+                    <img src="${randomImages[1]['image']}" alt="${randomImages[1]['character']}" >
+                    <div>${randomImages[1]['character']}</div>
+                </article> 
+                <article id='optionContainer3'>
+                    <input type="checkbox" id="feature3" onclick="selectOnlyThis(this.id)" value="${randomImages[2]['character']}"/>
+                    <img src="${randomImages[2]['image']}" alt="${randomImages[2]['character']}" >
+                    <div>${randomImages[2]['character']}</div>
+                </article> 
+                <article id='optionContainer4'>
+                    <input type="checkbox" id="feature4" onclick="selectOnlyThis(this.id)" value="${randomImages[3]['character']}"/>
+                    <img src="${randomImages[3]['image']}" alt="${randomImages[3]['character']}" >
+                    <div>${randomImages[3]['character']}</div>
+                </article>
+            </div>
+        </div>
+        <div id="nextQuestionButton">
+            <div>CONFIRM</div>
+        </div>
+        `
+        document.getElementById("nextQuestionButton").addEventListener('click',() => { nextQuestion(quotes[i],score,answers); return })
+
+        document.getElementById('gameHeader').id = 'scoreHeader';
+        document.getElementById('scoreHeader').innerHTML = `<div class="header_Title"> WHO SAID IT? </div><div id='circleScore'> ${i+1} / 10</div>`
+        
+    }
+
 
     sessionStorage.setItem("answers", JSON.stringify(answers))
     let auxAnswers =  JSON.parse(sessionStorage.getItem("answers"))
 
     let correctAnswers = auxAnswers.filter( item => item.result == 'correct' )
 
-    if(score == 5) {
-        alert("Perfect score! Congratulations!")
+    if(score == 10) {
+        Swal.fire({
+            title: 'Perfect score!',
+            text: 'Congratulations! You answered correctly all 10 questions',
+            icon:'success',
+            confirmButtonText: 'OK',
+        })
     } else {
-        alert("Your score was: " + score)
+        Swal.fire({
+            title: 'Game over!',
+            text: 'Your final score is '+ score,
+            icon:'success',
+            confirmButtonText: 'OK',
+        })
     }  
 
     if(score === 0){
@@ -197,7 +352,6 @@ function getARandomQuote () {
 
     let restartGameButton = document.getElementById("startGameButton")
     restartGameButton.addEventListener('click',restartGame)
-
 }
 
 function restartGame () {
@@ -209,3 +363,5 @@ function restartGame () {
     startGameButton.addEventListener('click',getARandomQuote)
 
 }
+
+
