@@ -149,6 +149,7 @@ function setUsername (event) {
 }
 
 let userName = ""
+let answers = []
 
 let submitNameButton = document.getElementById("submitNameButton")
 let nameInput = document.getElementById("nameInput")
@@ -201,8 +202,7 @@ function selectOnlyThis(id) {
     document.getElementById(id).checked = true;
 }
 
-function getSelectedOption() {  
-    console.log("entro a revisar los checkbox");
+function getSelectedOption() { 
     let selected = null
 
     for (let i = 1;i <= 4; i++) {
@@ -215,103 +215,7 @@ function getSelectedOption() {
     return selected
 }
 
-
-function nextQuestion(answerToCheck,score,answers) {
-    let selected = getSelectedOption()
-    
-    if(selected == null) {
-        Swal.fire({
-            title: 'No option selected',
-            text: 'Select an option to keep playing',
-            icon:'error',
-            confirmButtonText: 'OK',
-        })
-    } else {
-        if( selected.value.toLowerCase() == answerToCheck['character']['name'].toLowerCase()) {
-            score = score + 1
-            
-            answers.push({
-                quote: answerToCheck['sentence'],
-                character: answerToCheck['character']['name'],
-                result: 'correct'
-            })
-
-            Swal.fire({
-                title: 'Correct answer!',
-                text: 'You scored one more point \n Your score is: ' + score,
-                icon:'success',
-                confirmButtonText: 'OK',
-            })
-            
-        } else {
-            Swal.fire({
-                title: 'Wrong answer!',
-                text: 'Your score is still: ' + score,
-                icon:'error',
-                confirmButtonText: 'OK',
-            })
-        }
-        return
-    }
-}
-
-
-async function getARandomQuote () {
-
-    let score = 0
-    let answers = []
-    let quotes = await quotesFetch()
-
-    console.log("quotes ",quotes);
-    
-    for ( let i = 0; i < quotes.length ; i++) {
-
-        console.log("iteracion nro: ", i+1);
-        console.log("score es: ", score);
-
-        let quote = quotes[i].sentence
-
-        let randomImages = []
-        await getRandomImages(charactersImages,randomImages,quotes[i]['character']['name'])
-    
-        document.getElementById("gameContent").innerHTML = `
-        <div id='checkboxContainer'>
-            <div id='quoteTitle'> Who said this: '${quote}'</div>
-            <div id='imagesContainer'>
-                <article id='optionContainer1'>
-                    <input type="checkbox" id="feature1" onclick="selectOnlyThis(this.id)" value="${randomImages[0]['character']}"/>
-                    <img src="${randomImages[0]['image']}" alt="${randomImages[0]['character']}" >
-                    <div>${randomImages[0]['character']}</div>
-                </article> 
-                <article id='optionContainer2'>
-                    <input type="checkbox" id="feature2" onclick="selectOnlyThis(this.id)" value="${randomImages[1]['character']}"/>
-                    <img src="${randomImages[1]['image']}" alt="${randomImages[1]['character']}" >
-                    <div>${randomImages[1]['character']}</div>
-                </article> 
-                <article id='optionContainer3'>
-                    <input type="checkbox" id="feature3" onclick="selectOnlyThis(this.id)" value="${randomImages[2]['character']}"/>
-                    <img src="${randomImages[2]['image']}" alt="${randomImages[2]['character']}" >
-                    <div>${randomImages[2]['character']}</div>
-                </article> 
-                <article id='optionContainer4'>
-                    <input type="checkbox" id="feature4" onclick="selectOnlyThis(this.id)" value="${randomImages[3]['character']}"/>
-                    <img src="${randomImages[3]['image']}" alt="${randomImages[3]['character']}" >
-                    <div>${randomImages[3]['character']}</div>
-                </article>
-            </div>
-        </div>
-        <div id="nextQuestionButton">
-            <div>CONFIRM</div>
-        </div>
-        `
-        document.getElementById("nextQuestionButton").addEventListener('click',() => { nextQuestion(quotes[i],score,answers); return })
-
-        document.getElementById('gameHeader').id = 'scoreHeader';
-        document.getElementById('scoreHeader').innerHTML = `<div class="header_Title"> WHO SAID IT? </div><div id='circleScore'> ${i+1} / 10</div>`
-        
-    }
-
-
+function gameEnded(score,answers) {
     sessionStorage.setItem("answers", JSON.stringify(answers))
     let auxAnswers =  JSON.parse(sessionStorage.getItem("answers"))
 
@@ -349,9 +253,125 @@ async function getARandomQuote () {
         document.getElementById("gameContent").innerHTML = `<div class = 'answersContainer'> ${showResults} </div>  <div id="startGameButton"> <div id='restartGame'> Want to play again? </div></div>`
     }
 
-
     let restartGameButton = document.getElementById("startGameButton")
     restartGameButton.addEventListener('click',restartGame)
+}
+
+
+function nextQuestion(answerToCheck,score,answers,levelCompleted,iteration,quotes) {
+    let selected = getSelectedOption()
+    
+    if(selected == null) {
+        Swal.fire({
+            title: 'No option selected',
+            text: 'Select an option to keep playing',
+            icon:'error',
+            confirmButtonText: 'OK',
+        })
+    } else {
+        if( selected.value.toLowerCase() == answerToCheck['character']['name'].toLowerCase()) {
+
+            score = score + 1
+            console.log("score es: ", score);
+
+            answers.push({
+                quote: answerToCheck['sentence'],
+                character: answerToCheck['character']['name'],
+                result: 'correct'
+            })
+
+            Swal.fire({
+                title: 'Correct answer!',
+                text: 'You scored one more point \n Your score is: ' + score,
+                icon:'success',
+                confirmButtonText: 'OK',
+            })
+            
+        } else {
+            Swal.fire({
+                title: 'Wrong answer!',
+                text: 'Your score is still: ' + score,
+                icon:'error',
+                confirmButtonText: 'OK',
+            })
+        }
+
+        levelCompleted = true
+        
+        if(document.getElementById('gameHeader')) {
+            document.getElementById('gameHeader').id = 'scoreHeader';
+            document.getElementById('scoreHeader').innerHTML = `<div class="header_Title"> WHO SAID IT? </div><div id='circleScore'> ${iteration} / 10</div>`
+        } else {
+            document.getElementById('scoreHeader').innerHTML = `<div class="header_Title"> WHO SAID IT? </div><div id='circleScore'> ${iteration} / 10</div>`
+        }
+
+
+        if(levelCompleted) {
+            if(iteration == 10) {
+                gameEnded(score,answers)
+            } else {
+                iteration++
+                starGame(quotes,iteration,score)
+            }
+        }
+    }
+}
+
+
+async function starGame(quotes,iteration,score) {
+
+    let levelCompleted = false
+    
+    console.log("iteracion nro: ", iteration);
+    
+    let quote = quotes[iteration-1].sentence
+    let randomImages = []
+    await getRandomImages(charactersImages,randomImages,quotes[iteration-1]['character']['name'])
+    
+
+    document.getElementById("gameContent").innerHTML = `
+        <div id='checkboxContainer'>
+            <div id='quoteTitle'> Who said this: '${quote}'</div>
+            <div id='imagesContainer'>
+                <article id='optionContainer1'>
+                    <input type="checkbox" id="feature1" onclick="selectOnlyThis(this.id)" value="${randomImages[0]['character']}"/>
+                    <img src="${randomImages[0]['image']}" alt="${randomImages[0]['character']}" >
+                    <div>${randomImages[0]['character']}</div>
+                </article> 
+                <article id='optionContainer2'>
+                    <input type="checkbox" id="feature2" onclick="selectOnlyThis(this.id)" value="${randomImages[1]['character']}"/>
+                    <img src="${randomImages[1]['image']}" alt="${randomImages[1]['character']}" >
+                    <div>${randomImages[1]['character']}</div>
+                </article> 
+                <article id='optionContainer3'>
+                    <input type="checkbox" id="feature3" onclick="selectOnlyThis(this.id)" value="${randomImages[2]['character']}"/>
+                    <img src="${randomImages[2]['image']}" alt="${randomImages[2]['character']}" >
+                    <div>${randomImages[2]['character']}</div>
+                </article> 
+                <article id='optionContainer4'>
+                    <input type="checkbox" id="feature4" onclick="selectOnlyThis(this.id)" value="${randomImages[3]['character']}"/>
+                    <img src="${randomImages[3]['image']}" alt="${randomImages[3]['character']}" >
+                    <div>${randomImages[3]['character']}</div>
+                </article>
+            </div>
+        </div>
+        <div id="nextQuestionButton">
+            <div>CONFIRM</div>
+        </div>
+        `
+        document.getElementById("nextQuestionButton").addEventListener('click',() => { nextQuestion(quotes[iteration-1],score,answers,levelCompleted,iteration,quotes); return })
+}
+
+
+async function getARandomQuote () {
+    let quotes = await quotesFetch()
+
+    let score = 0
+    console.log("quotes ",quotes);
+
+    let iteration = 1
+    
+    starGame(quotes,iteration,score)
 }
 
 function restartGame () {
