@@ -57,7 +57,7 @@ const charactersImages = [
         "image": "https://thronesapi.com/assets/images/jaime-lannister.jpg"
     },
     {
-        'character': "Eddard \"Ned\" Stark",
+        'character': 'Eddard "Ned" Stark',
         "image": "https://thronesapi.com/assets/images/ned-stark.jpg"
     },
     {
@@ -215,11 +215,13 @@ function getSelectedOption() {
     return selected
 }
 
-function gameEnded(score,answers) {
+function gameEnded(score,answers,iteration) {
     sessionStorage.setItem("answers", JSON.stringify(answers))
     let auxAnswers =  JSON.parse(sessionStorage.getItem("answers"))
 
     let correctAnswers = auxAnswers.filter( item => item.result == 'correct' )
+
+    document.getElementById('scoreHeader').innerHTML = `<div class="header_Title"> WHO SAID IT? </div>`
 
     if(score == 10) {
         Swal.fire({
@@ -238,7 +240,6 @@ function gameEnded(score,answers) {
     }  
 
     if(score === 0){
-
         document.getElementById("gameContent").innerHTML = "<div id = 'answersTitleContainer' > You don't have correct answers </div><div id='startGameButton'> </div>"
 
         document.getElementById("startGameButton").innerHTML = '<div id="restartGame"> Want to play again? </div>'
@@ -298,17 +299,9 @@ function nextQuestion(answerToCheck,score,answers,levelCompleted,iteration,quote
 
         levelCompleted = true
         
-        if(document.getElementById('gameHeader')) {
-            document.getElementById('gameHeader').id = 'scoreHeader';
-            document.getElementById('scoreHeader').innerHTML = `<div class="header_Title"> WHO SAID IT? </div><div id='circleScore'> ${iteration} / 10</div>`
-        } else {
-            document.getElementById('scoreHeader').innerHTML = `<div class="header_Title"> WHO SAID IT? </div><div id='circleScore'> ${iteration} / 10</div>`
-        }
-
-
         if(levelCompleted) {
             if(iteration == 10) {
-                gameEnded(score,answers)
+                gameEnded(score,answers,iteration)
             } else {
                 iteration++
                 starGame(quotes,iteration,score)
@@ -321,8 +314,6 @@ function nextQuestion(answerToCheck,score,answers,levelCompleted,iteration,quote
 async function starGame(quotes,iteration,score) {
 
     let levelCompleted = false
-    
-    console.log("iteracion nro: ", iteration);
     
     let quote = quotes[iteration-1].sentence
     let randomImages = []
@@ -359,6 +350,13 @@ async function starGame(quotes,iteration,score) {
             <div>CONFIRM</div>
         </div>
         `
+        if(document.getElementById('gameHeader')) {
+            document.getElementById('gameHeader').id = 'scoreHeader';
+            document.getElementById('scoreHeader').innerHTML = `<div class="header_Title"> WHO SAID IT? </div><div id='circleScore'> ${iteration} / 10</div>`
+        } else {
+            document.getElementById('scoreHeader').innerHTML = `<div class="header_Title"> WHO SAID IT? </div><div id='circleScore'> ${iteration} / 10</div>`
+        }
+        
         document.getElementById("nextQuestionButton").addEventListener('click',() => { nextQuestion(quotes[iteration-1],score,answers,levelCompleted,iteration,quotes); return })
 }
 
