@@ -6,11 +6,6 @@ for( let i = 0; i < 200; i++) {
 }
 snowRef.innerHTML = innterHTMLaux.join('')
 
-function updateValue(e) {
-    console.log(e.srcElement.value)
-    return e.srcElement.value
-}
-
 const charactersImages = [
     {
         'character': "Brienne of Tharth" ,
@@ -215,7 +210,7 @@ function getSelectedOption() {
     return selected
 }
 
-function gameEnded(score,answers,iteration) {
+function gameEnded(score,answers) {
     sessionStorage.setItem("answers", JSON.stringify(answers))
     let auxAnswers =  JSON.parse(sessionStorage.getItem("answers"))
 
@@ -273,7 +268,6 @@ function nextQuestion(answerToCheck,score,answers,levelCompleted,iteration,quote
         if( selected.value.toLowerCase() == answerToCheck['character']['name'].toLowerCase()) {
 
             score = score + 1
-            console.log("score es: ", score);
 
             answers.push({
                 quote: answerToCheck['sentence'],
@@ -301,7 +295,7 @@ function nextQuestion(answerToCheck,score,answers,levelCompleted,iteration,quote
         
         if(levelCompleted) {
             if(iteration == 10) {
-                gameEnded(score,answers,iteration)
+                gameEnded(score,answers)
             } else {
                 iteration++
                 starGame(quotes,iteration,score)
