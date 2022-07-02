@@ -283,6 +283,12 @@ function nextQuestion(answerToCheck,score,answers,levelCompleted,iteration,quote
             })
             
         } else {
+            answers.push({
+                quote: answerToCheck['sentence'],
+                character: answerToCheck['character']['name'],
+                result: 'incorrect'
+            })
+
             Swal.fire({
                 title: 'Wrong answer!',
                 text: 'Your score is still: ' + score,
@@ -359,8 +365,6 @@ async function getARandomQuote () {
     let quotes = await quotesFetch()
 
     let score = 0
-    console.log("quotes ",quotes);
-
     let iteration = 1
     
     starGame(quotes,iteration,score)
